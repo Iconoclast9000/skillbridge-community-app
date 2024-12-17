@@ -1,0 +1,26 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    - always_declare_return_types
+    - cancel_subscriptions
+    - close_sinks
+    - comment_references
+    - one_member_abstracts
+    - only_throw_errors
+    - package_api_docs
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_interpolation_to_compose_strings
+    - prefer_single_quotes
+    - test_types_in_equals
+    - throw_in_finally
+    - unawaited_futures
+    - unnecessary_statements
+
+analyzer:
+  exclude:
+    - lib/generated_plugin_registrant.dart
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
