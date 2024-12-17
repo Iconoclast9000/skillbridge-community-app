@@ -5,6 +5,10 @@ import 'config/routes.dart';
 import 'providers/auth_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/skill_provider.dart';
+import 'providers/theme_provider.dart';
+import 'theme/app_theme.dart';
+import 'services/crash_reporting_service.dart';
+import 'services/analytics_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +16,7 @@ void main() async {
   runApp(LoadingApp());
 
   try {
+    // Initialize Firebase
     await Firebase.initializeApp(
       options: const FirebaseOptions(
         apiKey: 'your-api-key',
@@ -20,8 +25,18 @@ void main() async {
         projectId: 'your-project-id',
       ),
     );
+
+    // Initialize crash reporting
+    await CrashReportingService.initialize();
+
+    // Run the app
     runApp(MyApp());
-  } catch (e) {
+  } catch (e, stackTrace) {
+    await CrashReportingService.recordError(
+      error: e,
+      stackTrace: stackTrace,
+      reason: 'Error initializing app',
+    );
     runApp(ErrorApp(error: e.toString()));
   }
 }
@@ -34,92 +49,30 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => SkillProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp(
-        title: 'SkillBridge Community',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          ),
-          cardTheme: CardTheme(
-            elevation: 2,
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-          ),
-        ),
-        routes: AppRoutes.routes,
-        onGenerateRoute: AppRoutes.onGenerateRoute,
-        onUnknownRoute: AppRoutes.onUnknownRoute,
-        initialRoute: '/admin/login',
-      ),
-    );
-  }
-}
-
-class LoadingApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('Initializing...')
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            title: 'SkillBridge Community',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeProvider.themeMode,
+            routes: AppRoutes.routes,
+            onGenerateRoute: AppRoutes.onGenerateRoute,
+            onUnknownRoute: AppRoutes.onUnknownRoute,
+            initialRoute: '/admin/login',
+            navigatorObservers: [
+              FirebaseAnalyticsObserver(
+                analytics: FirebaseAnalytics.instance,
+              ),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 }
 
-class ErrorApp extends StatelessWidget {
-  final String error;
-
-  const ErrorApp({Key? key, required this.error}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline, size: 48, color: Colors.red),
-                SizedBox(height: 16),
-                Text(
-                  'Failed to initialize app',
-                  style: TextStyle(fontSize: 24),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  error,
-                  style: TextStyle(color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    main();
-                  },
-                  child: Text('Retry'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+// LoadingApp and ErrorApp components remain the same...

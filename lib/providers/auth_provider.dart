@@ -49,7 +49,7 @@ class AuthProvider extends ChangeNotifier {
       _error = 'An error occurred during login';
       await AnalyticsService.logError(
         error: e.toString(),
-        screenName: 'AdminLogin',
+        screenName: 'login_screen',
       );
       await CrashReportingService.recordError(
         error: e,
@@ -67,30 +67,29 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signOut() async {
     try {
-      if (_adminUser != null) {
-        await AnalyticsService.logAdminAction(
-          adminId: _adminUser!.id,
-          action: 'logout',
-          targetType: 'session',
-        );
-      }
       await _authService.signOut();
       _adminUser = null;
+      await AnalyticsService.logAdminAction(
+        adminId: _adminUser?.id ?? 'unknown',
+        action: 'logout',
+        targetType: 'session',
+      );
     } catch (e, stackTrace) {
       await CrashReportingService.recordError(
         error: e,
         stackTrace: stackTrace,
         reason: 'Error during sign out',
       );
+    } finally {
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> checkAuthStatus() async {
     try {
-      final currentUser = _authService.currentUser;
-      if (currentUser != null) {
-        final isValidAdmin = await AuthMiddleware.isValidAdmin(currentUser.uid);
+      final user = _authService.currentUser;
+      if (user != null) {
+        final isValidAdmin = await AuthMiddleware.isValidAdmin(user.uid);
         if (!isValidAdmin) {
           await signOut();
         }
@@ -101,10 +100,6 @@ class AuthProvider extends ChangeNotifier {
         stackTrace: stackTrace,
         reason: 'Error checking auth status',
       );
-      await signOut();
     }
   }
-
-  Stream<bool> get authStateChanges => _authService.authStateChanges()
-    .map((user) => user != null);
 }
