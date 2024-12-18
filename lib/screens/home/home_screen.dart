@@ -1,47 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../features/auth/admin_auth_controller.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final authController = context.watch<AdminAuthController>();
+    final admin = authController.currentAdmin;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('SkillBridge'),
+        title: const Text('Home'),
         actions: [
           IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.person),
-            onPressed: () {},
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await authController.logout();
+              Navigator.pushReplacementNamed(context, '/admin/login');
+            },
           ),
         ],
       ),
-      body: ListView(
-        padding: EdgeInsets.all(16.0),
-        children: [
-          Card(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Nearby Skills',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  SizedBox(height: 16),
-                  Text('No skills available in your area yet.'),
-                ],
-              ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Welcome ${admin?.username ?? 'User'}!'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/admin/dashboard');
+              },
+              child: const Text('Go to Dashboard'),
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
-        tooltip: 'Add Skill',
+          ],
+        ),
       ),
     );
   }
