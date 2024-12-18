@@ -72,7 +72,7 @@ class AuthProvider extends ChangeNotifier {
       await AnalyticsService.logAdminAction(
         adminId: _adminUser?.id ?? 'unknown',
         action: 'logout',
-        targetType: 'session',
+        targetType: 'auth',
       );
     } catch (e, stackTrace) {
       await CrashReportingService.recordError(

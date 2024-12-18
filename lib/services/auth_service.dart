@@ -1,33 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/admin_user.dart';
+import '../middleware/data_middleware.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Stream of auth state changes
-  Stream<User?> authStateChanges() => _auth.authStateChanges();
-
-  // Get current user
   User? get currentUser => _auth.currentUser;
+
+  Stream<User?> authStateChanges() => _auth.authStateChanges();
 
   Future<AdminUser?> signInAdmin(String email, String password) async {
     try {
-      // Sign in with email and password
-      final UserCredential result = await _auth.signInWithEmailAndPassword(
+      final credentials = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      final User? user = result.user;
+      final user = credentials.user;
 
       if (user == null) return null;
 
-      // Check if user is an admin
       final adminDoc = await _firestore.collection('admins').doc(user.uid).get();
       
       if (!adminDoc.exists) {
-        await _auth.signOut(); // Sign out if not an admin
+        await _auth.signOut();
         return null;
       }
 
@@ -44,24 +41,15 @@ class AuthService {
   }
 
   Future<void> signOut() async {
-    try {
-      await _auth.signOut();
-    } catch (e) {
-      print('Error signing out: $e');
-      throw e;
-    }
+    await _auth.signOut();
   }
 
-  // Check if user has admin access
-  Future<bool> hasAdminAccess() async {
-    final user = currentUser;
-    if (user == null) return false;
-
+  Future<bool> resetPassword(String email) async {
     try {
-      final adminDoc = await _firestore.collection('admins').doc(user.uid).get();
-      return adminDoc.exists;
+      await _auth.sendPasswordResetEmail(email: email);
+      return true;
     } catch (e) {
-      print('Error checking admin access: $e');
+      print('Error resetting password: $e');
       return false;
     }
   }
