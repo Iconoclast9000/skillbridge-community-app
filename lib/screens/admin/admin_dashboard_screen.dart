@@ -7,6 +7,8 @@ class AdminDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final admin = context.watch<AdminAuthController>().currentAdmin;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Dashboard'),
@@ -27,22 +29,22 @@ class AdminDashboardScreen extends StatelessWidget {
           _AdminDashboardCard(
             title: 'Users',
             icon: Icons.people,
-            onTap: () => Navigator.pushNamed(context, '/admin/users'),
+            onTap: () {},
           ),
           _AdminDashboardCard(
             title: 'Skills',
             icon: Icons.school,
-            onTap: () => Navigator.pushNamed(context, '/admin/skills'),
+            onTap: () {},
           ),
           _AdminDashboardCard(
             title: 'Reports',
             icon: Icons.assessment,
-            onTap: () => Navigator.pushNamed(context, '/admin/reports'),
+            onTap: () {},
           ),
           _AdminDashboardCard(
             title: 'Settings',
             icon: Icons.settings,
-            onTap: () => Navigator.pushNamed(context, '/admin/settings'),
+            onTap: () {},
           ),
         ],
       ),

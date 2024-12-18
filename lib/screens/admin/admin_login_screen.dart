@@ -88,8 +88,6 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       validator: (value) =>
                           value?.isEmpty ?? true ? 'Username is required' : null,
                       enabled: !_isLoading,
-                      textInputAction: TextInputAction.next,
-                      autofocus: true,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -104,7 +102,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                                 : Icons.visibility,
                           ),
                           onPressed: () {
-                            setState(() => _obscurePassword = !_obscurePassword);
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
                           },
                         ),
                       ),
@@ -112,7 +112,6 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       validator: (value) =>
                           value?.isEmpty ?? true ? 'Password is required' : null,
                       enabled: !_isLoading,
-                      onFieldSubmitted: (_) => _handleLogin(),
                     ),
                     const SizedBox(height: 24),
                     SizedBox(
