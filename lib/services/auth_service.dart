@@ -1,4 +1,5 @@
 import 'package:shared_preferences.dart';
+import '../core/utils/secure_storage.dart';
 
 class AuthService {
   final SharedPreferences _prefs;
@@ -7,9 +8,10 @@ class AuthService {
 
   Future<bool> signIn(String email, String password) async {
     try {
-      // For testing purposes, accept any email/password combination
-      if (email.isNotEmpty && password.isNotEmpty) {
+      // For demo purposes only - in production, use proper authentication
+      if (email == 'admin@test.com' && password == 'admin123') {
         await _prefs.setString('user_email', email);
+        await SecureStorage.saveToken('dummy_token');
         return true;
       }
       return false;
@@ -21,6 +23,7 @@ class AuthService {
 
   Future<void> signOut() async {
     await _prefs.remove('user_email');
+    await SecureStorage.deleteToken();
   }
 
   bool isSignedIn() {
