@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'services/crash_reporting_service.dart';
 import 'config/routes.dart';
 import 'providers/auth_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/skill_provider.dart';
 import 'providers/theme_provider.dart';
 import 'theme/app_theme.dart';
-import 'services/crash_reporting_service.dart';
-import 'services/analytics_service.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(LoadingApp());
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   try {
-    // Initialize Firebase
     await Firebase.initializeApp(
       options: const FirebaseOptions(
         apiKey: 'your-api-key',
@@ -26,18 +24,18 @@ void main() async {
       ),
     );
 
-    // Initialize crash reporting
     await CrashReportingService.initialize();
 
-    // Run the app
     runApp(MyApp());
   } catch (e, stackTrace) {
     await CrashReportingService.recordError(
       error: e,
       stackTrace: stackTrace,
-      reason: 'Error initializing app',
+      reason: 'Error during app initialization',
     );
     runApp(ErrorApp(error: e.toString()));
+  } finally {
+    FlutterNativeSplash.remove();
   }
 }
 
@@ -75,4 +73,47 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// LoadingApp and ErrorApp components remain the same...
+class ErrorApp extends StatelessWidget {
+  final String error;
+
+  const ErrorApp({Key? key, required this.error}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      home: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, size: 64, color: Colors.red),
+                SizedBox(height: 16),
+                Text(
+                  'Failed to initialize app',
+                  style: TextStyle(fontSize: 24),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  error,
+                  style: TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    main();
+                  },
+                  child: Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
