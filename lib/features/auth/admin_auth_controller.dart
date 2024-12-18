@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/admin_user.dart';
 import '../../core/utils/secure_storage.dart';
 
@@ -74,10 +74,9 @@ class AdminAuthController extends ChangeNotifier {
 
   Future<bool> changePassword(String currentPassword, String newPassword) async {
     try {
-      // In a real app, validate against backend
+      // For demo purposes - in production, validate against backend
       if (currentPassword == 'admin123') {
-        // Here you would update the password in your backend
-        // For demo, we'll just return success
+        // In a real app, you would update the password in your backend
         return true;
       }
       return false;
