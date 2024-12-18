@@ -1,27 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'features/auth/admin_auth_controller.dart';
+import 'screens/auth/login_screen.dart';
+import 'screens/home/home_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+
+  runApp(SkillBridgeApp(prefs: prefs));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SkillBridgeApp extends StatelessWidget {
+  final SharedPreferences prefs;
+
+  const SkillBridgeApp({Key? key, required this.prefs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SkillBridge Community',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('SkillBridge'),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => AdminAuthController(prefs),
         ),
-        body: const Center(
-          child: Text('Welcome to SkillBridge'),
+      ],
+      child: MaterialApp(
+        title: 'SkillBridge',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          cardTheme: CardTheme(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            filled: true,
+            fillColor: Colors.grey[100],
+          ),
         ),
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => const LoginScreen(),
+          '/home': (context) => const HomeScreen(),
+        },
       ),
     );
   }
