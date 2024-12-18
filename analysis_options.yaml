@@ -2,29 +2,19 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
-    - always_declare_return_types
-    - avoid_empty_else
-    - avoid_relative_lib_imports
-    - avoid_returning_null_for_future
-    - avoid_slow_async_io
-    - avoid_types_as_parameter_names
-    - cancel_subscriptions
-    - close_sinks
-    - control_flow_in_finally
-    - empty_statements
-    - hash_and_equals
-    - invariant_booleans
-    - iterable_contains_unrelated_type
-    - list_remove_unrelated_type
-    - literal_only_boolean_expressions
-    - no_adjacent_strings_in_list
-    - no_duplicate_case_values
-    - prefer_void_to_null
-    - test_types_in_equals
-    - throw_in_finally
-    - unnecessary_statements
-    - unrelated_type_equality_checks
-    - valid_regexps
+    always_declare_return_types: true
+    avoid_empty_else: true
+    avoid_returning_null_for_void: true
+    avoid_void_async: true
+    cancel_subscriptions: true
+    close_sinks: true
+    deprecated_consistency: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    prefer_relative_imports: true
+    sized_box_for_whitespace: true
+    use_super_parameters: true
+    valid_regexps: true
 
 analyzer:
   exclude:
@@ -32,3 +22,10 @@ analyzer:
     - '**/*.freezed.dart'
   errors:
     invalid_annotation_target: ignore
+
+# Ignore specific files or patterns
+exclude:
+  - lib/generated_plugin_registrant.dart
+  - '**/*.g.dart'
+  - '**/*.freezed.dart'
+  - test/generated_migrations/**
