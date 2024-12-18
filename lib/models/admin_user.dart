@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class AdminUser {
   final String id;
   final String username;
@@ -9,15 +11,24 @@ class AdminUser {
     required this.lastLogin,
   });
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'username': username,
-        'lastLogin': lastLogin.toIso8601String(),
-      };
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'username': username,
+      'lastLogin': lastLogin.toIso8601String(),
+    };
+  }
 
-  factory AdminUser.fromJson(Map<String, dynamic> json) => AdminUser(
-        id: json['id'] as String,
-        username: json['username'] as String,
-        lastLogin: DateTime.parse(json['lastLogin'] as String),
-      );
+  String toJson() => json.encode(toMap());
+
+  factory AdminUser.fromJson(String source) => 
+      AdminUser.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  factory AdminUser.fromMap(Map<String, dynamic> map) {
+    return AdminUser(
+      id: map['id'] as String,
+      username: map['username'] as String,
+      lastLogin: DateTime.parse(map['lastLogin'] as String),
+    );
+  }
 }

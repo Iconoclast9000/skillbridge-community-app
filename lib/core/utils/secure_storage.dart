@@ -14,27 +14,4 @@ class SecureStorage {
   static Future<void> deleteToken() async {
     await _storage.delete(key: 'admin_token');
   }
-
-  static Future<void> saveCredentials(String username, String password) async {
-    await _storage.write(key: 'username', value: username);
-    await _storage.write(key: 'password', value: password);
-  }
-
-  static Future<Map<String, String?>> getCredentials() async {
-    final username = await _storage.read(key: 'username');
-    final password = await _storage.read(key: 'password');
-    return {
-      'username': username,
-      'password': password,
-    };
-  }
-
-  static Future<void> deleteCredentials() async {
-    await _storage.delete(key: 'username');
-    await _storage.delete(key: 'password');
-  }
-
-  static Future<void> clearAll() async {
-    await _storage.deleteAll();
-  }
 }
