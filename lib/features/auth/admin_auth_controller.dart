@@ -71,4 +71,19 @@ class AdminAuthController extends ChangeNotifier {
       debugPrint('Logout error: $e');
     }
   }
+
+  Future<bool> changePassword(String currentPassword, String newPassword) async {
+    try {
+      // In a real app, validate against backend
+      if (currentPassword == 'admin123') {
+        // Here you would update the password in your backend
+        // For demo, we'll just return success
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint('Change password error: $e');
+      return false;
+    }
+  }
 }
