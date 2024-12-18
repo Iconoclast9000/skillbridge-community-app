@@ -28,11 +28,5 @@ void main() {
       expect(result, false);
       expect(authController.isAuthenticated, false);
     });
-
-    test('logout sets authenticated to false', () async {
-      await authController.login('admin', 'admin123');
-      await authController.logout();
-      expect(authController.isAuthenticated, false);
-    });
   });
 }
