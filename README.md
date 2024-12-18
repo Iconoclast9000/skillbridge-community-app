@@ -1,107 +1,57 @@
-# SkillBridge: Local Skills Exchange & Learning Community App
+# SkillBridge Community App
 
-## 🎯 Concept Overview
-SkillBridge is a mobile application that connects people in local communities to exchange skills, knowledge, and micro-learning opportunities. The app combines elements of social networking, skill marketplace, and gamified learning in a unique hyperlocal context.
+A Flutter application for local skill exchange and micro-learning communities.
 
-### Core Features (MVP)
-- **Skill Mapping**: Users can map their skills and learning interests
-- **Local Matching**: AI-powered matching of learners with nearby skill-sharers
-- **Micro-Learning Sessions**: 15-30 minute skill-sharing sessions
-- **Trust System**: Community-driven rating and verification system
-- **Time Banking**: Exchange system based on time credits
+## Features
 
-## 🔍 Market Analysis
-### Target Audience
-- Primary: Young professionals (25-40) looking to expand their skill set
-- Secondary: Retirees and experts wanting to share their knowledge
-- Tertiary: Students seeking practical skills and mentorship
+- Admin Dashboard
+- User Management
+- Skills Management
+- Analytics & Reporting
+- Secure Authentication
+- Performance Monitoring
 
-### Unique Value Proposition
-1. Hyperlocal focus unlike global platforms
-2. Time-based exchange system instead of monetary transactions
-3. Focus on micro-learning sessions rather than long-term commitments
-4. Community trust system with real-world verification
+## Getting Started
 
-### Market Gap
-While platforms like Skillshare focus on online content and apps like Nextdoor focus on general community interaction, SkillBridge uniquely combines:
-- Face-to-face learning
-- Skill exchange economy
-- Local community building
-- Instant skill-sharing opportunities
+### Prerequisites
 
-## 💻 Technical Implementation
-### Technology Stack
-- **Frontend**: Flutter (for cross-platform development)
-- **Backend**: Firebase (for MVP phase)
-- **Database**: Cloud Firestore
-- **Authentication**: Firebase Auth
-- **Location Services**: Google Maps API
+- Flutter SDK
+- Firebase Account
+- Android Studio / VS Code
 
-### MVP Development Phases
-1. **Month 1**: User Authentication & Profile Creation
-   - Basic user registration
-   - Skill/interest mapping
-   - Profile creation
+### Installation
 
-2. **Month 2**: Matching System & Discovery
-   - Location-based search
-   - Skill matching algorithm
-   - Basic chat functionality
+1. Clone the repository:
+```bash
+git clone https://github.com/Iconoclast9000/skillbridge-community-app.git
+```
 
-3. **Month 3**: Session Management
-   - Session scheduling
-   - Time banking system
-   - Basic rating system
+2. Install dependencies:
+```bash
+flutter pub get
+```
 
-4. **Month 4**: Community Features
-   - Trust verification
-   - Community guidelines
-   - Basic analytics
+3. Configure Firebase:
+- Create a new Firebase project
+- Add your Firebase configuration to `lib/main.dart`
+- Enable Authentication and Firestore
 
-## 💰 Monetization Strategy
-### Revenue Streams
-1. **Freemium Model**
-   - Basic: Free skill exchange
-   - Premium: Advanced features, verified status, group sessions
-   
-2. **Transaction Fees**
-   - Optional monetary payments (10% fee)
-   - Premium session booking fees
-   
-3. **Advertising**
-   - Local business partnerships
-   - Sponsored skill-sharing events
-   
-4. **Enterprise Solutions**
-   - Corporate learning communities
-   - Local business employee training
+4. Run the app:
+```bash
+flutter run
+```
 
-## 🚀 Growth Strategy
-### Phase 1: Launch (Months 1-6)
-- Focus on single city/community
-- Build core user base through local partnerships
-- Establish community guidelines and trust system
+## Testing
 
-### Phase 2: Regional Expansion (Months 7-12)
-- Expand to nearby cities
-- Implement cross-community features
-- Add advanced matching algorithms
+Run tests using:
+```bash
+flutter test
+```
 
-### Phase 3: Feature Expansion (Year 2)
-- Group learning sessions
-- Virtual session options
-- Community challenges and events
-- Integration with educational institutions
+## Contributing
 
-## 🛠️ Getting Started
-[Development setup instructions will be added]
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
-## 📱 Supported Platforms
-- Android 6.0+
-- iOS 12.0+
+## License
 
-## 🤝 Contributing
-[Contribution guidelines will be added]
-
-## 📄 License
-MIT License - see LICENSE file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
